@@ -12,12 +12,18 @@ use App\Models\Plan;
 use App\Models\ReferralCode;
 use App\Models\RemnawaveVpnKey;
 use App\Models\VpnKey;
+use App\Models\WebUser;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait HasSubscriptionRelations
 {
+    public function webUser(): BelongsTo
+    {
+        return $this->belongsTo(WebUser::class);
+    }
+
     public function telegraphChat(): BelongsTo
     {
         return $this->belongsTo(CustomTelegraphChat::class, 'telegraph_chat_id');

@@ -20,6 +20,7 @@ class Subscription extends Model
     protected $fillable = [
         'token',
         'telegraph_chat_id',
+        'web_user_id',
         'referred_by_code_id',
         'plan_id',
         'duration_id',
