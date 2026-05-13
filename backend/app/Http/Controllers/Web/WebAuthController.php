@@ -58,9 +58,15 @@ class WebAuthController extends Controller
     {
         /** @var WebUser $user */
         $user = $request->user();
+        $subscription = Subscription::query()
+            ->with(['plan', 'duration'])
+            ->where('web_user_id', $user->id)
+            ->latest('id')
+            ->first();
 
         return response()->json([
             'user' => $this->formatWebUser($user),
+            'subscription' => $this->formatSubscription($subscription),
         ]);
     }
 
@@ -82,6 +88,22 @@ class WebAuthController extends Controller
             'id' => $webUser->id,
             'email' => $webUser->email,
             'name' => $webUser->name,
+        ];
+    }
+
+    private function formatSubscription(?Subscription $subscription): ?array
+    {
+        if (! $subscription) {
+            return null;
+        }
+
+        return [
+            'id' => $subscription->id,
+            'status' => $subscription->status->value,
+            'end_date' => $subscription->end_datetime?->format('Y-m-d H:i:s'),
+            'plan' => $subscription->plan->name ?? null,
+            'duration' => $subscription->duration->days ?? null,
+            'token' => $subscription->token,
         ];
     }
 
@@ -121,14 +143,7 @@ class WebAuthController extends Controller
                 'last_name' => $userData['last_name'] ?? ($chat->last_name ?? ''),
                 'username' => $userData['username'] ?? ($chat->name ?? ''),
             ],
-            'subscription' => $subscription ? [
-                'id' => $subscription->id,
-                'status' => $subscription->status->value,
-                'end_date' => $subscription->end_datetime?->format('Y-m-d H:i:s'),
-                'plan' => $subscription->plan->name ?? null,
-                'duration' => $subscription->duration->days ?? null,
-                'token' => $subscription->token,
-            ] : null,
+            'subscription' => $this->formatSubscription($subscription),
         ]);
     }
 

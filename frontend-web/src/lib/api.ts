@@ -20,6 +20,15 @@ export type WebAuthUser = {
   name: string | null;
 };
 
+export type WebAuthSubscription = {
+  id: number;
+  status: string;
+  plan?: string | null;
+  duration?: number | null;
+  end_date?: string | null;
+  token?: string | null;
+};
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
@@ -57,7 +66,7 @@ export async function loginWebClient(email: string, password: string) {
 }
 
 export async function fetchWebClientMe() {
-  const { data } = await api.get<{ user: WebAuthUser }>('/web/auth/me');
+  const { data } = await api.get<{ user: WebAuthUser; subscription: WebAuthSubscription | null }>('/web/auth/me');
   return data;
 }
 
