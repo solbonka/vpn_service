@@ -12,6 +12,7 @@ export type AuthSession = {
     id: number;
     status: string;
     plan?: string | null;
+    duration?: number | null;
     end_date?: string | null;
     token?: string | null;
   } | null;

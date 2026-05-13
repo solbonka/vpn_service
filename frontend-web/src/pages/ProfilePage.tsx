@@ -5,7 +5,7 @@ import { getAuthSession, saveAuthSession } from '../lib/auth';
 export default function ProfilePage() {
   const session = getAuthSession();
   const [user, setUser] = useState(session?.user);
-  const subscription = session?.subscription;
+  const [subscription, setSubscription] = useState(session?.subscription);
 
   useEffect(() => {
     const current = getAuthSession();
@@ -14,7 +14,7 @@ export default function ProfilePage() {
     }
     let cancelled = false;
     fetchWebClientMe()
-      .then(({ user: u }) => {
+      .then(({ user: u, subscription }) => {
         if (cancelled) {
           return;
         }
@@ -28,7 +28,9 @@ export default function ProfilePage() {
         saveAuthSession({
           ...current,
           user: nextUser,
+          subscription,
         });
+        setSubscription(subscription);
       })
       .catch(() => {});
     return () => {
