@@ -1,0 +1,7 @@
+.idea/
+.env
+
+# Frontend Mini App
+frontend-miniapp/node_modules/
+frontend-miniapp/dist/
+frontend-miniapp/.env

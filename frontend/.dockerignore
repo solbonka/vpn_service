@@ -1,0 +1,59 @@
+# ============================
+# Node / npm
+# ============================
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json # (если используешь yarn/pnpm, иначе можешь убрать)
+.yarn-integrity
+*.tgz
+
+# ============================
+# Build output
+# ============================
+dist
+build
+
+# ============================
+# Logs and cache
+# ============================
+logs
+*.log
+.cache
+.parcel-cache
+
+# ============================
+# IDE / system files
+# ============================
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================
+# Git and documentation
+# ============================
+.git
+.gitignore
+README.md
+*.md
+
+# ============================
+# Other
+# ============================
+coverage
+.nyc_output
+pids
+*.pid
+*.seed
+*.pid.lock

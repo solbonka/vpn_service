@@ -1,0 +1,444 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Анимации */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:root {
+  /* Основные цвета в стиле логотипа приложения */
+  --primary-blue: #1e40af;      /* Основной синий из логотипа */
+  --dark-blue: #1e3a8a;         /* Темный синий */
+  --light-blue: #3b82f6;        /* Светло-синий */
+  --lighter-blue: #60a5fa;      /* Еще светлее синий */
+  --accent-yellow: #fbbf24;     /* Желтый акцент из логотипа */
+  --light-yellow: #fde047;      /* Светло-желтый */
+  --darker-yellow: #f59e0b;     /* Темнее желтый */
+  
+  /* Градиенты */
+  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --gradient-secondary: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  --gradient-yellow: linear-gradient(135deg, #fbbf24 0%, #fde047 100%);
+  --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  
+  /* Фоновые цвета */
+  --bg-primary: #1e40af;        /* Основной синий фон */
+  --bg-secondary: #1e3a8a;      /* Темно-синий */
+  --bg-card: #ffffff;           /* Белый фон карточек */
+  --bg-card-glass: rgba(255, 255, 255, 0.95); /* Стеклянный эффект */
+  
+        /* Текстовые цвета */
+        --text-primary: #ffffff;      /* Белый текст */
+        --text-secondary: #e2e8f0;    /* Светло-серый текст */
+        --text-light: #cbd5e1;        /* Светлый текст */
+        --text-dark: #1e293b;         /* Темный текст для карточек */
+        --text-dark-secondary: #475569; /* Вторичный темный текст */
+        --text-dark-strong: #0f172a;  /* Очень темный текст для лучшего контраста */
+  
+  /* Границы и тени */
+  --border-light: rgba(255, 255, 255, 0.2);
+  --border-medium: rgba(255, 255, 255, 0.3);
+  --shadow-card: 0 8px 32px rgba(30, 64, 175, 0.15);
+  --shadow-button: 0 4px 16px rgba(251, 191, 36, 0.3);
+  --shadow-hover: 0 8px 24px rgba(251, 191, 36, 0.4);
+  
+  /* Telegram переменные для совместимости */
+  --tg-theme-bg-color: var(--bg-primary);
+  --tg-theme-text-color: var(--text-primary);
+  --tg-theme-hint-color: var(--text-light);
+  --tg-theme-link-color: var(--primary-blue);
+  --tg-theme-button-color: var(--primary-blue);
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-secondary-bg-color: var(--bg-secondary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  font-size: 16px; /* Увеличенный базовый размер шрифта для пожилых людей */
+  line-height: 1.6; /* Увеличенная высота строк для лучшей читаемости */
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tg-theme-hint-color);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tg-theme-text-color);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--tg-theme-button-color);
+  outline-offset: 2px;
+}
+
+/* Custom button active state */
+.active\:scale-95:active {
+  transform: scale(0.95);
+}
+
+.active\:scale-98:active {
+  transform: scale(0.98);
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse animation for VPN status */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Spin animation for loading */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Telegram-specific styles */
+.tg-button {
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tg-button:hover {
+  opacity: 0.8;
+}
+
+.tg-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Status indicators */
+.status-online {
+  background: #22c55e;
+}
+
+.status-offline {
+  background: #ef4444;
+}
+
+.status-maintenance {
+  background: #f59e0b;
+}
+
+/* Progress bars */
+.progress-bar {
+  height: 8px;
+  background: var(--tg-theme-secondary-bg-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--tg-theme-button-color);
+  transition: width 0.3s ease;
+}
+
+/* Responsive design improvements */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .text-3xl {
+    font-size: 1.75rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+}
+
+/* Стили для пожилых людей - минималистичный дизайн */
+.elderly-friendly {
+  /* Увеличенные размеры шрифтов */
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.elderly-button {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px; /* Увеличенная высота кнопок */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.elderly-button:hover {
+  background: var(--light-blue);
+  transform: none; /* Убираем анимации для простоты */
+}
+
+.elderly-button:active {
+  background: var(--primary-blue);
+  transform: none;
+}
+
+.elderly-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.elderly-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.elderly-subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.elderly-text {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.elderly-text-large {
+  font-size: 18px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Кнопки в стиле UltimaVPN */
+.vpn-button {
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+  min-height: 56px;
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.vpn-button:hover {
+  background: var(--gradient-secondary);
+  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+  transform: translateY(-2px);
+}
+
+.vpn-button:active {
+  transform: translateY(0);
+}
+
+.vpn-button-primary {
+  background: var(--gradient-yellow);
+  color: var(--text-dark);
+  box-shadow: var(--shadow-button);
+}
+
+.vpn-button-primary:hover {
+  background: var(--gradient-yellow);
+  box-shadow: var(--shadow-hover);
+}
+
+.vpn-button-secondary {
+  background: var(--bg-card-glass);
+  color: var(--text-dark);
+  border: 2px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(10px);
+}
+
+.vpn-button-secondary:hover {
+  background: var(--gradient-yellow);
+  border-color: var(--accent-yellow);
+  color: var(--text-dark);
+}
+
+/* Кнопки в две колонки */
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.button-row .vpn-button {
+  margin-bottom: 0;
+  min-height: 52px;
+  font-size: 14px;
+}
+
+/* Современные карточки */
+.simple-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.simple-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
+}
+
+/* Стеклянные карточки для фона */
+.glass-card {
+  background: var(--bg-card-glass);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(15px);
+}
+
+/* Контрастные цвета для важных элементов */
+.important-text {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.warning-text {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.success-text {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* Убираем сложные анимации */
+.no-animations * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-light: #94a3b8;
+    --border-light: #334155;
+    --border-medium: #475569;
+  }
+}
