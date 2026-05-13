@@ -128,7 +128,10 @@ export async function createMiniappSubscriptionPayment(planId: number, durationI
   );
   return data;
 }
+<<<<<<< codex/add-subscription-formatting-in-frontend-web-6hkqge
+=======
 <<<<<<< codex/add-subscription-formatting-in-frontend-web-ktmb2v
+>>>>>>> main
 
 
 export async function createWebSubscriptionPayment(planId: number, durationId: number) {
@@ -141,5 +144,8 @@ export async function createWebSubscriptionPayment(planId: number, durationId: n
   );
   return data;
 }
+<<<<<<< codex/add-subscription-formatting-in-frontend-web-6hkqge
 =======
+=======
+>>>>>>> main
 >>>>>>> main
