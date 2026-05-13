@@ -11,6 +11,7 @@ use App\Http\Controllers\MiniApp\ReferralController;
 use App\Http\Controllers\MiniApp\LotteryController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Web\WebAuthController;
+use App\Http\Controllers\Web\WebSubscriptionController;
 use App\Http\Middleware\InjectSubscription;
 use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Middleware\EnsureSubscriptionIsActive;
@@ -107,6 +108,8 @@ Route::prefix('miniapp')->group(function () {
 });
 
 Route::prefix('web')->group(function () {
+    Route::get('/subscription/plans', [WebSubscriptionController::class, 'getPlans']);
+
     Route::prefix('auth')->group(function () {
         Route::post('/register', [WebAuthController::class, 'register'])->middleware('throttle:10,1');
         Route::post('/login', [WebAuthController::class, 'login'])->middleware('throttle:20,1');

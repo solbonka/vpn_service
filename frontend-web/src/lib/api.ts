@@ -81,3 +81,22 @@ export async function logoutSessionCompletely() {
   }
   clearAuthSession();
 }
+
+export type WebPlan = {
+  id: number;
+  name: string;
+  price: number;
+  servers_count: number;
+};
+
+export type WebDuration = {
+  id: number;
+  name: string;
+  days: number;
+  discount_percentage: number;
+};
+
+export async function fetchWebPlans() {
+  const { data } = await api.get<{ success: boolean; plans: WebPlan[]; durations: WebDuration[] }>('/web/subscription/plans');
+  return data;
+}
