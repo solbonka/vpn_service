@@ -118,6 +118,7 @@ Route::prefix('web')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [WebAuthController::class, 'me']);
             Route::post('/logout', [WebAuthController::class, 'logout']);
+            Route::post('/subscription/create-payment', [WebSubscriptionController::class, 'createPayment']);
         });
     });
 });

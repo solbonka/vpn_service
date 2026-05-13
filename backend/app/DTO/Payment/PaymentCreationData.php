@@ -11,7 +11,8 @@ class PaymentCreationData
         public Plan $plan,
         public Duration $duration,
         public int $price,
-        public int $chatId
+        public ?int $chatId = null,
+        public array $metadata = []
     ) {}
 
     public static function fromArray(array $data): self
@@ -20,7 +21,8 @@ class PaymentCreationData
             plan: Plan::query()->find($data['plan_id']),
             duration: Duration::query()->find($data['duration_id']),
             price: $data['price'],
-            chatId: $data['chat_id']
+            chatId: $data['chat_id'] ?? null,
+            metadata: $data['metadata'] ?? []
         );
     }
 }
