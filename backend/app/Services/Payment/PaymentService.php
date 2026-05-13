@@ -75,11 +75,11 @@ class PaymentService
             ],
             'capture' => true,
             'description' => 'Оплата по тарифу: ' . $paymentData->plan->name . ' сроком на ' . $paymentData->duration->name,
-            'metadata' => [
+            'metadata' => array_filter(array_merge([
                 'plan_id' => $paymentData->plan->id,
                 'duration_id' => $paymentData->duration->id,
-                'chat_id' => $paymentData->chatId
-            ]
+                'chat_id' => $paymentData->chatId,
+            ], $paymentData->metadata), fn ($value) => $value !== null)
         ], uniqid('', true));
 
         $this->storePaymentToDataBase($payment);
@@ -151,6 +151,40 @@ class PaymentService
         $planId = $payment->metadata['plan_id'] ?? null;
         $durationId = $payment->metadata['duration_id'] ?? null;
         $paymentType = $payment->metadata['type'] ?? 'subscription';
+        $paymentSource = $payment->metadata['source'] ?? 'telegram';
+
+
+        if ($paymentSource === 'web') {
+            $paymentDataBase = Payment::query()->where('yookassa_payment_id', $payment->getId())->first();
+            if (!$paymentDataBase) {
+                throw new RuntimeException("Не найден платеж в БД: {$payment->getId()}");
+            }
+
+            if ($payment->status === 'succeeded' && $payment->paid) {
+                if ($paymentDataBase->status !== PaymentStatusEnum::SUCCEEDED) {
+                    $paymentDataBase->status = PaymentStatusEnum::SUCCEEDED;
+                    $paymentDataBase->save();
+
+                    $subscription = $paymentDataBase->subscription;
+                    if ($subscription) {
+                        $subscription->plan_id = (int) $planId;
+                        $subscription->duration_id = (int) $durationId;
+                        $subscription->status = \App\Enums\Subscription\SubscriptionStatusEnum::ACTIVE;
+                        $subscription->end_datetime = now()->addDays((int) optional($subscription->duration)->days ?? 30);
+                        $subscription->save();
+                    }
+                }
+                return;
+            }
+
+            if ($payment->status === 'canceled') {
+                $paymentDataBase->status = PaymentStatusEnum::CANCELED;
+                $paymentDataBase->save();
+                return;
+            }
+
+            return;
+        }
 
         if ($paymentType === 'ticket_number_change') {
             $this->handleTicketNumberChangePayment($payment);
@@ -557,34 +591,29 @@ class PaymentService
     private function storePaymentToDataBase(PaymentInterface $payment): void
     {
         $chatId = $payment->metadata['chat_id'] ?? null;
+        $subscriptionId = $payment->metadata['subscription_id'] ?? null;
 
-        if (!$chatId) {
-            throw new RuntimeException(
-                'Отсутствуют ключевые метаданные в платеже: ' . json_encode(compact('chatId'))
-            );
+        if (!$subscriptionId && $chatId) {
+            $subscriptionId = Subscription::query()->where('telegraph_chat_id', $chatId)->value('id');
         }
 
-        $subscription = Subscription::query()->where('telegraph_chat_id', $chatId)->first();
-
-        if (!$subscription) {
-            throw new RuntimeException("Не найден subscription для chat_id: $chatId");
+        if (!$subscriptionId) {
+            throw new RuntimeException('Отсутствуют метаданные subscription_id/chat_id в платеже');
         }
 
         $paymentId = $payment->getId();
         $amount = $payment->amount->getValue();
         $paymentUrl = $payment->getConfirmation()?->getConfirmationUrl();
 
-        $payment = app(StorePaymentAction::class)->execute(new StorePaymentActionDto(
-            subscriptionId: $subscription->id,
+        $created = app(StorePaymentAction::class)->execute(new StorePaymentActionDto(
+            subscriptionId: (int) $subscriptionId,
             yookassaPaymentId: $paymentId,
             amount: $amount,
             paymentUrl: $paymentUrl
         ));
 
-        if (!$payment) {
-            Log::error("Не удалось создать платеж для чата: $chatId");
-
-            throw new RuntimeException("Не удалось создать платеж для чата: $chatId");
+        if (!$created) {
+            throw new RuntimeException("Не удалось создать платеж для subscription_id: $subscriptionId");
         }
     }
 

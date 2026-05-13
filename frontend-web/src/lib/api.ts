@@ -128,3 +128,18 @@ export async function createMiniappSubscriptionPayment(planId: number, durationI
   );
   return data;
 }
+<<<<<<< codex/add-subscription-formatting-in-frontend-web-ktmb2v
+
+
+export async function createWebSubscriptionPayment(planId: number, durationId: number) {
+  const { data } = await api.post<{ success: boolean; payment_url: string; payment_id: string; amount: number }>(
+    '/web/auth/subscription/create-payment',
+    {
+      plan_id: planId,
+      duration_id: durationId,
+    },
+  );
+  return data;
+}
+=======
+>>>>>>> main

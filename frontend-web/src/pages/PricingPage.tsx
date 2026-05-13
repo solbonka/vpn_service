@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   calculateMiniappPrice,
   createMiniappSubscriptionPayment,
+  createWebSubscriptionPayment,
   fetchWebPlans,
   type WebDuration,
   type WebPlan,
@@ -86,17 +87,22 @@ export default function PricingPage() {
     [durations],
   );
 
-  const canCreatePayment =
+  const canCreateTelegramPayment =
     session?.provider === 'telegram' && !!session.subscription?.token && !!selectedPlanId && !!selectedDurationId;
 
+  const canCreateWebPayment = session?.provider === 'web_email' && !!selectedPlanId && !!selectedDurationId;
+
   const handleCreatePayment = async () => {
-    if (!canCreatePayment || !selectedPlanId || !selectedDurationId || !session?.subscription?.token) {
+    if (!selectedPlanId || !selectedDurationId || !session) {
       return;
     }
     setActionError(null);
     setIsCreatingPayment(true);
     try {
-      const result = await createMiniappSubscriptionPayment(selectedPlanId, selectedDurationId, session.subscription.token);
+      const result =
+        session.provider === 'web_email'
+          ? await createWebSubscriptionPayment(selectedPlanId, selectedDurationId)
+          : await createMiniappSubscriptionPayment(selectedPlanId, selectedDurationId, session.subscription?.token || '');
       if (result?.payment_url) {
         window.location.href = result.payment_url;
         return;
@@ -179,7 +185,7 @@ export default function PricingPage() {
               Войти и оформить
             </Link>
           </div>
-        ) : canCreatePayment ? (
+        ) : canCreateTelegramPayment || canCreateWebPayment ? (
           <div className="hero-actions" style={{ marginTop: '1rem' }}>
             <button className="btn btn-primary" type="button" onClick={handleCreatePayment} disabled={isCreatingPayment || isCalculatingPrice}>
               {isCreatingPayment ? 'Создаём платёж…' : 'Перейти к оплате'}
@@ -187,7 +193,7 @@ export default function PricingPage() {
           </div>
         ) : (
           <p className="pricing-discount-note" style={{ marginTop: '1rem' }}>
-            Прямое оформление доступно для Telegram-аккаунтов с активной связкой подписки.
+            Для продолжения оформления войдите через Telegram или email-аккаунт сайта.
           </p>
         )}
 
