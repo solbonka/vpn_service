@@ -100,3 +100,31 @@ export async function fetchWebPlans() {
   const { data } = await api.get<{ success: boolean; plans: WebPlan[]; durations: WebDuration[] }>('/web/subscription/plans');
   return data;
 }
+
+
+export async function calculateMiniappPrice(planId: number, durationId: number) {
+  const { data } = await api.post<{ success: boolean; old_price: number; discounted_price: number; discount_percent: number }>(
+    '/miniapp/subscription/calculate-price',
+    {
+      plan_id: planId,
+      duration_id: durationId,
+    },
+  );
+  return data;
+}
+
+export async function createMiniappSubscriptionPayment(planId: number, durationId: number, subscriptionToken: string) {
+  const { data } = await api.post<{ success: boolean; payment_url: string; payment_id: string; amount: number }>(
+    '/miniapp/subscription/create-payment',
+    {
+      plan_id: planId,
+      duration_id: durationId,
+    },
+    {
+      headers: {
+        'X-Sub-Token': subscriptionToken,
+      },
+    },
+  );
+  return data;
+}

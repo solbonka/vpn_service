@@ -13,6 +13,7 @@ export type AuthSession = {
     status: string;
     plan?: string | null;
     end_date?: string | null;
+    token?: string | null;
   } | null;
 };
 
